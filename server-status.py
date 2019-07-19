@@ -11,9 +11,8 @@ def insert(domain, vhost, client_ip, path):
 			critical=0
 		c.execute('''INSERT INTO log(domain, critical, vhost, client_ip, path) values(?,?,?,?,?)''', (domain,critical,vhost,client_ip,path))
 		conn.commit()
-		#print '[!] Got data: Domain - '+domain+' - vhost - '+vhost+' - client - '+client_ip+' - path - '+path
+		print '[!] Got data: Domain - '+domain+' - vhost - '+vhost+' - client - '+client_ip+' - path - '+path
 	else:
-		#print '[-] Duplicate Skipped!'
 		return None;
 
 def processing(target):
@@ -22,7 +21,7 @@ def processing(target):
 		response = urllib2.urlopen(req)
 		if response.code == 200:
 			sstatus = response.read();
-			info2 = re.compile('</td><td>(.*)</td><td nowrap>(.*)</td><td nowrap>GET (.*)</td></tr>')
+			info2 = re.compile('</td><td>(.*)</td><td nowrap>(.*)</td><td nowrap>(\w+ .*)HTTP/.*</td></tr>')
 			res2 = re.findall(info2, sstatus)
 			#print len(res2)
 			for line in res2:
